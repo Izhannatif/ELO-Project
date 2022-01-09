@@ -74,14 +74,14 @@ class _RatingPageState extends State<RatingPage> {
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1),
                         ),
-                        Text(
-                          '$p1Rating',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1),
-                        ),
+                        // Text(
+                        //   '$p1Rating',
+                        //   style: const TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: 22,
+                        //       fontWeight: FontWeight.bold,
+                        //       letterSpacing: 1),
+                        // ),
                       ],
                     ),
                   ],
@@ -145,14 +145,14 @@ class _RatingPageState extends State<RatingPage> {
                               fontWeight: FontWeight.bold,
                               letterSpacing: 1),
                         ),
-                        Text(
-                          '$p2Rating',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1),
-                        ),
+                        // Text(
+                        //   '$p2Rating',
+                        //   style: const TextStyle(
+                        //       color: Colors.white,
+                        //       fontSize: 22,
+                        //       fontWeight: FontWeight.bold,
+                        //       letterSpacing: 1),
+                        // ),
                       ],
                     ),
                   ],
@@ -240,16 +240,16 @@ class _RatingPageState extends State<RatingPage> {
     if (d == true) {
       setState(() {
         p1Rating =
-            listOfGames[0].rating = p1Rating + (32 * (1 - expectedA)).round();
+            listOfGames[0].rating = p1Rating + (320 * (1 - expectedA)).round();
         p2Rating =
-            listOfGames[1].rating = p2Rating + (32 * (0 - expectedB)).round();
+            listOfGames[1].rating = p2Rating + (320 * (0 - expectedB)).round();
       });
     } else if (d == false) {
       setState(() {
         p1Rating =
-            listOfGames[0].rating = p1Rating + (32 * (0 - expectedA)).round();
+            listOfGames[0].rating = p1Rating + (320 * (0 - expectedA)).round();
         p2Rating =
-            listOfGames[1].rating = p2Rating + (32 * (1 - expectedB)).round();
+            listOfGames[1].rating = p2Rating + (320 * (1 - expectedB)).round();
       });
     }
 
