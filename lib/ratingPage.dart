@@ -43,14 +43,13 @@ class _RatingPageState extends State<RatingPage> {
                   children: [
                     Container(
                       decoration: const BoxDecoration(
-                        color: Colors.black54,
+                        color: Colors.transparent,
                       ),
                       height: MediaQuery.of(context).size.height / 3,
                       width: MediaQuery.of(context).size.width / 3,
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            shuffle();
                             scoreCalculator(true);
                             shuffle();
                           });
@@ -114,14 +113,13 @@ class _RatingPageState extends State<RatingPage> {
                   children: [
                     Container(
                       decoration: const BoxDecoration(
-                        color: Colors.black54,
+                        color: Colors.transparent,
                       ),
                       height: MediaQuery.of(context).size.height / 3,
                       width: MediaQuery.of(context).size.width / 3,
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            
                             scoreCalculator(false);
                             shuffle();
                           });
@@ -170,7 +168,7 @@ class _RatingPageState extends State<RatingPage> {
   }
 
   void shuffle() {
-   //Fisher-yates shuffling Algorithm.
+    //Fisher-yates shuffling Algorithm.
     int index;
     GameRating temp;
     Random random = Random();
@@ -180,7 +178,7 @@ class _RatingPageState extends State<RatingPage> {
       listOfGames[index] = listOfGames[i];
       listOfGames[i] = temp;
     }
-   //Fisher-yates shuffling Algorithm.
+    //Fisher-yates shuffling Algorithm.
     setState(() {
       //Here we are declaring the shuffled list into new variable through which we will call them.
       name1 = listOfGames[0].name;
