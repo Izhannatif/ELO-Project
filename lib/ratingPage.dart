@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print, prefer_adjacent_string_concatenation
 
 import 'dart:math';
 
@@ -13,13 +13,14 @@ class RatingPage extends StatefulWidget {
 }
 
 class _RatingPageState extends State<RatingPage> {
-  static List<GameRating> gamesList = listOfGames;
-  String imagePath1 = gamesList[0].rndImg;
-  String imagePath2 = gamesList[1].rndImg;
-  String name1 = gamesList[0].name;
-  String name2 = gamesList[1].name;
-  double p1Rating = gamesList[0].rating;
-  double p2Rating = gamesList[1].rating;
+  String imagePath1 = listOfGames[0].rndImg;
+  String imagePath2 = listOfGames[1].rndImg;
+  String name1 = listOfGames[0].name;
+  String name2 = listOfGames[1].name;
+  double p1Rating = listOfGames[0].rating;
+  double p2Rating = listOfGames[1].rating;
+  double newRatingA = 0;
+  double newRatingB = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,8 @@ class _RatingPageState extends State<RatingPage> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            elo_Algorithm(true);
+                            shuffle();
+                            scoreCalculator(true);
                             shuffle();
                           });
                         },
@@ -62,13 +64,25 @@ class _RatingPageState extends State<RatingPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      name1.toUpperCase(),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1),
+                    Column(
+                      children: [
+                        Text(
+                          name1.toUpperCase(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                        Text(
+                          '$p1Rating',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -107,8 +121,8 @@ class _RatingPageState extends State<RatingPage> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            elo_Algorithm(false);
-
+                            
+                            scoreCalculator(false);
                             shuffle();
                           });
                         },
@@ -121,13 +135,25 @@ class _RatingPageState extends State<RatingPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      name2.toUpperCase(),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1),
+                    Column(
+                      children: [
+                        Text(
+                          name2.toUpperCase(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                        Text(
+                          '$p2Rating',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -144,15 +170,26 @@ class _RatingPageState extends State<RatingPage> {
   }
 
   void shuffle() {
+   //Fisher-yates shuffling Algorithm.
+    int index;
+    GameRating temp;
+    Random random = Random();
+    for (int i = listOfGames.length - 1; i > 0; i--) {
+      index = random.nextInt(i + 1);
+      temp = listOfGames[index];
+      listOfGames[index] = listOfGames[i];
+      listOfGames[i] = temp;
+    }
+   //Fisher-yates shuffling Algorithm.
     setState(() {
-      gamesList.shuffle();
-      name1 = gamesList[0].name;
-      imagePath1 = gamesList[0].rndImg;
-      p1Rating = gamesList[0].rating;
+      //Here we are declaring the shuffled list into new variable through which we will call them.
+      name1 = listOfGames[0].name;
+      imagePath1 = listOfGames[0].rndImg;
+      p1Rating = listOfGames[0].rating;
 
-      name2 = gamesList[1].name;
-      imagePath2 = gamesList[1].rndImg;
-      p2Rating = gamesList[1].rating;
+      name2 = listOfGames[1].name;
+      imagePath2 = listOfGames[1].rndImg;
+      p2Rating = listOfGames[1].rating;
     });
     print("Shuffled");
   }
@@ -167,7 +204,7 @@ class _RatingPageState extends State<RatingPage> {
         width: 150,
         decoration: BoxDecoration(
             color: Colors.red.shade900,
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+            borderRadius: const BorderRadius.all(Radius.circular(15))),
         child: Center(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,48 +230,42 @@ class _RatingPageState extends State<RatingPage> {
   }
   // ALGORITHMMMM HEREEEEEEEEEEE!!!!!!!!!! \\
 
-  probablity(double r1, double r2) {
-    return (1.0 * 1.0 / (1 + 1.0 * pow(10, 1.0 * ((r1 - r2) / 400))));
-  }
-
-  elo_Algorithm(bool d) {
-    //double img1Pb = (1.0 / (1.0 + pow(10, ((p1Rating - p2Rating) / 400))));
-    //double img2Pb = (1.0 / (1.0 + pow(10, ((p2Rating - p1Rating) / 400))));
-    int k = 100;
-    double ra = p1Rating;
-    double rb = p2Rating;
-
-    double pb = probablity(ra, rb);
-    double pa = probablity(rb, ra);
-
+  scoreCalculator(bool d) {
+    double expectedA = ((1) / (1 + pow(10, ((p2Rating - p1Rating) / 400))));
+    double expectedB = ((1) / (1 + pow(10, ((p1Rating - p2Rating) / 400))));
+    print(expectedA);
+    print(expectedB);
+    print(expectedA + expectedB);
+    print(d);
     if (d == true) {
       setState(() {
-        ra = ra + k * (1 - pa);
-        rb = rb + k * (0 - pb);
+        p1Rating =
+            listOfGames[0].rating = p1Rating + (32 * (1 - expectedA)).round();
+        p2Rating =
+            listOfGames[1].rating = p2Rating + (32 * (0 - expectedB)).round();
       });
-    } else {
+    } else if (d == false) {
       setState(() {
-        ra = ra + k * (0 - pa);
-        rb = rb + k * (1 - pb);
+        p1Rating =
+            listOfGames[0].rating = p1Rating + (32 * (0 - expectedA)).round();
+        p2Rating =
+            listOfGames[1].rating = p2Rating + (32 * (1 - expectedB)).round();
       });
     }
-    setState(() {
-      p1Rating = ra;
-      p2Rating = rb;
-    });
+
     print('updated rating');
 
     print("rating of image 1: " +
         '$p1Rating' +
         " Name " +
         name1 +
-        " Probablity:" +
-        '${pa}');
+        " Expected A:" +
+        '$expectedA');
     print("rating of image 2: " +
         '$p2Rating' +
         " Name " +
         name2 +
-        " Probablity:" +
-        '${pa}');
+        " Expected B:" +
+        '$expectedB');
   }
 }
